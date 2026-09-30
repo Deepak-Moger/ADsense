@@ -1,0 +1,114 @@
+/* Webcam-only mode: the video is the surface, never an optional background. */
+.webcam-app { background: #0b1417; color: #edf7f2; }
+.webcam-live-feed { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; transform: scaleX(-1); opacity: 0; pointer-events: none; }
+.webcam-live-feed.ready { opacity: 1; }
+.webcam-app .interactive-canvas { cursor: default; }
+.webcam-edge-shade { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: linear-gradient(180deg, #081316a6, transparent 130px, transparent calc(100% - 130px), #0813169c); }
+.webcam-app .glass { background: #132222d9; border-color: #ffffff20; box-shadow: 0 8px 32px #00000023; color: #e0efe7; backdrop-filter: blur(18px); }
+.webcam-app .app-header { top: 25px; }
+.webcam-app .brand-name { color: #f3faf6; text-shadow: 0 1px 8px #00000030; }
+.webcam-app .brand-name small { color: #c0cfc6; font-size: 10px; }
+.webcam-app .ultra-badge { background: #a2e8c925; border-color: #bceacf44; color: #c3f4d9; }
+.webcam-app .header-actions { gap: 9px; }
+.webcam-app .header-actions > .icon-button { color: #ecf6ef; background: #101e2040; }
+.webcam-app .header-actions > .icon-button:hover { background: #ffffff25; }
+.webcam-app .export-button { color: #effbf3; background: #142521c4; border-color: #d9f5e338; backdrop-filter: blur(12px); }
+.webcam-app .export-button:hover { background: #254138e8; }
+.webcam-stop-button { display: inline-flex; gap: 7px; align-items: center; justify-content: center; height: 39px; border: 1px solid #faccc137; color: #ffddd4; background: #3b2525b3; border-radius: 8px; padding: 0 12px; font-size: 11px; backdrop-filter: blur(12px); }
+.webcam-stop-button:hover { background: #693833bd; }
+.webcam-status { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; padding: 10px 14px; background: #0b1919b3; border: 1px solid #effff01c; border-radius: 25px; color: #d2e6d8; font-size: 11px; backdrop-filter: blur(12px); white-space: nowrap; }
+.webcam-status strong { font-size: 9px; letter-spacing: 1px; font-weight: 600; color: #b2e4c2; }
+.webcam-status .status-dot { width: 6px; height: 6px; }
+.webcam-status .status-dot.live { background: #99e8b2; box-shadow: 0 0 0 3px #9efaba15; }
+.webcam-status-divider { width: 1px; height: 12px; background: #e6ffe829; }
+.webcam-fps { color: #9eb9a6; font-size: 9px; margin-left: 2px; }
+.webcam-start { position: absolute; z-index: 4; left: 50%; top: 49%; transform: translate(-50%, -50%); width: min(500px, calc(100% - 44px)); text-align: center; }
+.webcam-start-icon { width: 85px; height: 85px; margin: 0 auto 29px; border-radius: 26px; background: #a5e6c911; color: #9ddebd; border: 1px solid #c1f2d923; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 80px #65d9aa09; }
+.webcam-start-eyebrow { font-size: 9px; font-weight: 600; letter-spacing: 2px; color: #84a899; }
+.webcam-start h1 { font-size: 38px; font-weight: 500; line-height: 1.2; letter-spacing: -1.5px; color: #e9f6ee; margin: 20px 0 16px; }
+.webcam-start > p { max-width: 385px; margin: 0 auto 25px; color: #91a99f; font-size: 13px; line-height: 1.85; }
+.webcam-start > .primary-button { min-height: 45px; padding: 0 22px; background: #9fddbc; color: #173e32; border-color: #a8e4c4; font-size: 12px; font-weight: 600; }
+.webcam-start > .primary-button:hover { background: #bceccd; box-shadow: 0 4px 24px #b6efc914; }
+.webcam-start .camera-error { max-width: 390px; margin: 0 auto 22px; background: #e9b18d13; color: #f2c5a3; border: 1px solid #d6a7772b; font-size: 12px; }
+.webcam-start-privacy { display: flex; justify-content: center; align-items: center; gap: 7px; margin-top: 22px; font-size: 10px; color: #728f80; }
+.webcam-loading-note { position: absolute; bottom: 38px; left: 50%; transform: translateX(-50%); z-index: 10; color: #d9f6e4; font-size: 13px; text-align: center; background: #0c1919c9; border: 1px solid #e7ffed20; padding: 17px 24px; border-radius: 12px; backdrop-filter: blur(14px); }
+.webcam-loading-note small { display: block; color: #a8c5b5; font-size: 10px; margin-top: 8px; }
+.webcam-app .tool-rail-wrap { top: 50%; transform: translateY(-50%); }
+.webcam-app .tool-button { color: #afc6b8; }
+.webcam-app .tool-button:hover:not(:disabled) { background: #c6f6d718; color: #e3fae9; }
+.webcam-app .tool-button.active { background: #a4e6bb26; color: #bdedce; }
+.webcam-app .active-tool-dot { background: #bcecca; }
+.webcam-app .rail-divider, .webcam-app .dock-divider { background: #eaffec24; }
+.webcam-app .bottom-dock { bottom: 69px; }
+.webcam-app .dock-label { color: #b0c7b6; }
+.webcam-app .dock-size > div > span { color: #e1f4e5; }
+.webcam-app .dock-size small { color: #9fbaa6; }
+.webcam-app .size-dot { background: #9ab6a0; }
+.webcam-app .settings-button { color: #bcd9c3; }
+.webcam-app .settings-button:hover, .webcam-app .settings-button.selected { color: #e4fbea; background: #b3edc521; }
+.webcam-app .custom-color { border-color: #c9f4d775; color: #d6eee0; }
+.webcam-app .settings-panel { left: auto; right: calc(50% - 245px); bottom: 159px; }
+.webcam-app .settings-panel .icon-button { color: #b9d5c3; }
+.webcam-app .settings-panel .icon-button:hover { background: #c5ead21c; }
+.webcam-app .settings-panel .switch-row small { color: #a0b9a9; }
+.webcam-app .settings-panel .slider-setting { color: #c1d6c7; }
+.webcam-app .settings-panel .slider-setting > span { color: #bbd8c5; }
+.webcam-app .settings-panel .switch-row input { background: #60766a; }
+.webcam-app .settings-panel .switch-row input:checked { background: #67b58b; }
+.webcam-app .status-bar { bottom: 23px; }
+.webcam-app .local-status { color: #d4e5dc; font-size: 10px; text-shadow: 0 1px 5px #00000090; }
+.webcam-app .footer-brush { color: #bdcfc4; }
+.webcam-gesture-hint { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; font-size: 10px; color: #d9ece0; text-shadow: 0 1px 5px #00000090; white-space: nowrap; }
+.webcam-clear-button { display: flex; align-items: center; justify-content: center; gap: 7px; color: #e0efe4; font-size: 10px; padding: 8px 10px; background: #14251d80; border-radius: 6px; }
+.webcam-clear-button:hover { background: #d4a6982b; }
+.webcam-app.is-writing .interactive-canvas { cursor: none; }
+.webcam-app .modal { color: #263b3d; }
+.webcam-app .palette-center { background: #244337; color: #c0e3ce; }
+.webcam-app .palette-tools button { color: #c0dfca; }
+.webcam-app .palette-tools button.selected { background: #a4d6b42c; color: #d6f5e0; }
+.webcam-app .toast { bottom: 164px; }
+
+@media (max-width: 1100px) {
+  .webcam-status { top: 62px; }
+  .webcam-app .settings-panel { right: calc(50% - 225px); }
+}
+@media (max-width: 820px) {
+  .webcam-app .brand-name small { font-size: 9px; }
+  .webcam-app .webcam-gesture-hint { display: none; }
+  .webcam-app .settings-panel { right: calc(50% - 205px); }
+  .webcam-app .local-status { font-size: 9px; }
+}
+@media (max-width: 640px) {
+  .webcam-app .app-header { top: 18px; }
+  .webcam-app .brand-name small { display: none; }
+  .webcam-app .header-actions { gap: 5px; }
+  .webcam-app .export-button { width: 33px; height: 33px; }
+  .webcam-stop-button { width: 33px; height: 33px; padding: 0; }
+  .webcam-stop-button > span { display: none; }
+  .webcam-status { top: 53px; max-width: calc(100vw - 32px); font-size: 10px; padding: 8px 12px; gap: 8px; }
+  .webcam-status strong { font-size: 8px; }
+  .webcam-start { top: 52%; width: calc(100% - 48px); }
+  .webcam-start h1 { font-size: 31px; letter-spacing: -1px; }
+  .webcam-start > p { font-size: 12px; }
+  .webcam-start-eyebrow { font-size: 8px; letter-spacing: 1.4px; }
+  .webcam-start-privacy { font-size: 9px; line-height: 1.6; }
+  .webcam-start-icon { width: 73px; height: 73px; border-radius: 23px; margin-bottom: 23px; }
+  .webcam-app .bottom-dock { bottom: 65px; }
+  .webcam-app .settings-panel { right: 13px; bottom: 146px; }
+  .webcam-app .status-bar { bottom: 19px; }
+  .webcam-app .local-status { font-size: 8px; }
+  .webcam-clear-button { font-size: 9px; padding: 6px 8px; }
+  .webcam-app .toast { bottom: 148px; }
+  .webcam-loading-note { bottom: 22px; width: calc(100% - 44px); font-size: 11px; }
+}
+@media (max-height: 570px) {
+  .webcam-start { top: 58%; }
+  .webcam-start-icon { width: 50px; height: 50px; border-radius: 15px; margin-bottom: 12px; }
+  .webcam-start-icon svg { width: 25px; }
+  .webcam-start h1 { font-size: 26px; margin: 12px 0 8px; }
+  .webcam-start > p { font-size: 11px; margin-bottom: 15px; }
+  .webcam-start-privacy { margin-top: 13px; font-size: 9px; }
+  .webcam-app .bottom-dock { bottom: 53px; height: 65px; }
+  .webcam-app .status-bar { bottom: 12px; }
+  .webcam-app .settings-panel { bottom: 128px; }
+}

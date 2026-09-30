@@ -1,134 +1,86 @@
-# AdSync: Ad-to-Landing Page Personalization Demo
+# AirWrite Ultra — live webcam writing
 
-AdSync is a simple AI workflow where a user can:
+AirWrite now uses **only your full-screen live webcam**. Handwriting is overlaid directly on the video in real time. There is no blank board, background selector, mouse-drawing workspace, or canvas pan/zoom.
 
-1. Input an ad creative (image URL or upload)
-2. Input a landing page URL
-3. Generate a personalized version of the same landing page
+## Run
 
-Important: the system enhances the existing page (message match, CTA clarity, visual tuning) instead of generating a completely new page.
+Requires Node.js 20.19+ or 22.12+ and npm.
 
-## Live Demo
+```sh
+npm install
+npm run dev
+```
 
-Local demo:
+1. Open the localhost URL printed by Vite.
+2. Click **Start webcam** and allow camera permission.
+3. Your live video appears full-screen, mirrored like a selfie camera.
+4. When tracking is ready, raise your index finger and fold the other fingers to write. Open your palm to lift the pen.
 
-1. Run npm install
-2. Run npm run dev
-3. Open http://localhost:3000
+The camera starts only after you click Start. The first run downloads the MediaPipe runtime and hand model. While the model loads, your webcam feed remains visible. Camera denial, disconnection, and initialization failures have retry states; no blank drawing-board fallback is used.
 
-Public demo (recommended for reviewers): deploy this repository to Vercel and share the generated deployment URL.
+## Features
 
-## Brief Explanation (Google Doc)
+- Full-screen webcam at normal opacity, without blur or synthetic backgrounds.
+- High-DPI transparent ink and cursor layers over the video. Internal HTML canvas elements are rendering primitives, not a separate canvas mode.
+- Fingertip coordinates match the mirrored `object-fit: cover` video crop on wide and portrait screens.
+- Six writing tools: precision pen, fountain pen, neon, rainbow, highlighter, and eraser.
+- Color, thickness, opacity, smart-shape, and auto-hiding control settings.
+- Gesture-operated quick palette, undo/redo, clear confirmation, and laser trails.
+- Local persistence of writing and tool settings; camera frames are never stored by autosave.
+- Snapshot and clipboard export always include the live webcam frame and handwriting. PNG and WebP output are available at 2K or 4K longest-edge sizes; camera detail is limited by the source resolution. These are still images, not video recordings.
 
-Add your Google Doc link here:
+## Gestures
 
-- Google Doc: TODO - paste shareable link
+| Gesture | Action |
+| --- | --- |
+| Index up, middle/ring/pinky folded | Write over the live webcam |
+| Open palm | Lift the pen |
+| Fist or wide V sign | Erase writing |
+| Two fingers raised closely together | Laser trail that fades over 2 seconds |
+| Thumb/index pinch | Click a tool or open the quick palette |
+| Open palm held near the top of the visible video | Quick palette |
+| Open-palm swipe left | Undo |
+| Two quick pinches in the same spot | Clear-writing confirmation |
 
-Suggested Google Doc sections:
+Mouse and touch operate the UI controls; handwriting itself comes from your tracked hand. Use bright, even lighting and keep your hand in the visible camera area. Ambiguous poses fall back to hover. Hands outside the cropped video area lift the pen rather than drawing at a mismatched position.
 
-1. Problem statement
-2. Input/output contract
-3. Architecture and design choices
-4. Reliability and failure handling
-5. Demo walkthrough with screenshots
+## Shortcuts
 
-## How The System Works (Flow)
+- `P / F / N / R / H / E`: precision / fountain / neon / rainbow / highlighter / eraser
+- `Ctrl/Cmd Z`: undo
+- `Ctrl/Cmd Shift Z` or `Ctrl/Cmd Y`: redo
+- `Ctrl/Cmd S`: save a webcam snapshot
+- `C`: quick palette
+- `Delete / Backspace`: clear-writing confirmation
+- `?`: gesture guide
+- `Escape`: close a dialog or palette
 
-1. User submits ad creative + landing page URL from the UI.
-2. API fetches and normalizes landing page HTML.
-3. Processor extracts editable text elements and structure.
-4. Personalization engine runs:
-  - AI mode (when API key is valid): vision + structured personalization
-  - Fallback mode (when AI is unavailable): deterministic CRO personalization
-5. System applies targeted text/CSS modifications to the original HTML.
-6. UI renders:
-  - Original vs personalized preview
-  - Change list with reasons
-  - Ad analysis summary
+## Checks
 
-## Key Components / Agent Design
+```sh
+npm run build
+npm test
+```
 
-1. Frontend application
-  - File: app/page.tsx
-  - Responsibilities: collect inputs, call API, render previews, changes, analysis.
+Unit tests cover brush rendering, shape recognition, export utilities, and webcam-coordinate mapping. Build and test execution were attempted after the webcam-only update but remain blocked: the supplied command runner fails before executing commands because WSL cannot find `/bin/bash`. These tests have not been run. Real-camera behavior and visual rendering also require browser verification.
 
-2. Personalization API
-  - File: app/api/personalize/route.ts
-  - Responsibilities: validate input, fetch page, route to AI or fallback, return structured result.
+## Privacy and performance
 
-3. HTML processing layer
-  - File: lib/html-processor.ts
-  - Responsibilities: fetch and sanitize HTML, extract content map, apply safe modifications.
+Built with React, TypeScript, Vite, Zustand, Framer Motion, Lucide, and `@mediapipe/tasks-vision`. Camera frames are processed locally; there is no server, streaming upload, telemetry, or account.
 
-4. Prompt and output contract layer
-  - File: lib/prompts.ts
-  - Responsibilities: enforce structured AI output format and parser behavior.
+Initial network access is required for MediaPipe WASM (jsDelivr), Google's hand-landmark model, and Google Fonts. MediaPipe JavaScript is dynamically imported after camera startup. The package and WASM are pinned to `0.10.22-rc.20250304`. For fully offline deployment, self-host these assets and update `src/hooks/useHandTracking.ts` and `index.html`.
 
-5. Fallback personalizer
-  - File: lib/fallback-personalizer.ts
-  - Responsibilities: deterministic message-match and CRO-safe updates when AI path fails.
+Deploy the built `dist/` directory to an HTTPS static host. Camera access requires HTTPS or localhost. Embedded apps also need camera permission in their iframe and Permissions-Policy. Clipboard images and native fullscreen depend on browser support.
 
-## How We Handle Random Changes
+FPS and latency depend on the device, browser, camera, and scene complexity; universal zero latency or 60 FPS cannot be guaranteed. The status badge shows measured inference FPS. Camera capture requests up to 60 FPS at 1280×720, with actual settings negotiated by the browser. Tracking uses adaptive EMA smoothing, GPU initialization with CPU fallback, and video-frame callbacks. MediaPipe VIDEO inference currently runs synchronously on the main thread.
 
-1. Structure-aware edits
-  - Edits are applied by element index and content map, not blind full-page replacement.
+## Key files
 
-2. Conservative scope
-  - Only high-impact conversion elements are changed (headline, paragraph, CTA, light style overrides).
-
-3. Deterministic fallback
-  - If AI output is unavailable or invalid, fallback guarantees stable, predictable output.
-
-## How We Handle Broken UI
-
-1. Non-destructive preview model
-  - Original HTML is always preserved and can be toggled instantly.
-
-2. Defensive error handling
-  - Invalid URL, fetch failures, unsupported rendering, and API failures return user-safe messages.
-
-3. Graceful degradation
-  - AI failures automatically switch to fallback mode rather than stopping the workflow.
-
-4. CSS override boundaries
-  - Visual personalization uses lightweight overrides to reduce risk of layout breakage.
-
-## How We Handle Hallucinations
-
-1. Strict output contract
-  - AI response must conform to a parseable schema (analysis + explicit modifications).
-
-2. Parse-time safeguards
-  - Non-conforming AI output is rejected.
-
-3. Bounded modifications
-  - Changes are constrained to extracted page elements; no arbitrary DOM regeneration.
-
-4. Automatic fallback on AI errors
-  - If output is invalid or AI call fails, deterministic fallback is used.
-
-## How We Handle Inconsistent Outputs
-
-1. Stable fallback path
-  - A deterministic rule-based engine keeps output consistent across repeated runs.
-
-2. Exposed modification log
-  - Every change includes original text, personalized text, and reason for traceability.
-
-3. Summary + mode flags
-  - Response includes summary, demo mode status, and sanitized fallback reason for transparency.
-
-## Assumptions
-
-1. Landing page URL is publicly accessible and returns HTML.
-2. Best quality requires a valid Anthropic API key.
-3. Without a valid key, the demo still works in fallback mode.
-
-## Deployment Notes
-
-To generate a reviewer-friendly public link:
-
-1. Push repository to GitHub.
-2. Import into Vercel.
-3. Configure environment variable ANTHROPIC_API_KEY (optional but recommended).
-4. Deploy and share the Vercel URL.
+- `src/App.tsx`: webcam-only flow, live gestures, and controls.
+- `src/hooks/useHandTracking.ts`: camera lifecycle and MediaPipe tracking.
+- `src/lib/videoGeometry.ts`: crop-correct fingertip positioning.
+- `src/components/DrawingSurface.tsx`: transparent ink and cursor overlays.
+- `src/components/StudioUI.tsx`: compact tools, webcam permission state, palette.
+- `src/components/Dialogs.tsx`: gesture guide, webcam snapshots, confirmation.
+- `src/webcam.css`: webcam-only presentation.
+- `src/lib/drawing.ts`: rendering and export primitives. Legacy standalone background/SVG helpers remain available to the unit tests but are not exposed in the webcam-only interface.

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "title": "Review the current webcam and drawing layers",
+      "status": "done"
+    },
+    {
+      "title": "Make the live webcam the only writing surface and simplify the controls",
+      "status": "done"
+    },
+    {
+      "title": "Review the updated flow and attempt verification",
+      "status": "done"
+    }
+  ],
+  "updated_at": "2026-09-29T08:17:38.204Z",
+  "session_id": "01a0ebda-eff3-75f7-8622-ff62251b4f72"
+}
